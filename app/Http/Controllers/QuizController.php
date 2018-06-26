@@ -56,27 +56,31 @@ class QuizController extends Controller
 
     public function question(Quiz $quiz)
     {
-        if(!$quiz->isFinished()) {
-            $data['quiz'] = $quiz;
-            $data['answer'] = $quiz->active_question;
-            return view('answer', compact('data'));
-        } else {
-            return redirect()->route('home');
-        }
+
+        $data['quiz'] = $quiz;
+        $data['answer'] = $quiz->active_question;
+        return view('answer', compact('data'));
     }
 
     public function answer(Request $request, Quiz $quiz)
     {
+        DB::beginTransaction();
         try {
             $question = $quiz->active_question;
             $question->answer = $request->get("answer");
             $question->save();
+
+            $quiz->calcGoals();
+            $quiz->save();
+
+            DB::commit();
             if (!$quiz->isFinished()) {
                 return view('roulette', compact('quiz'));
             } else {
                 return redirect()->route('finish', compact('quiz'));
             }
         } catch (\Exception $e) {
+            DB::rollBack();
             return redirect()
                 ->route('home')
                 ->with(['alert-class' => 'alert-danger', 'message' => 'Erro na operação']);

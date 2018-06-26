@@ -4,17 +4,16 @@
         <thead>
         <tr>
             <th>#</th>
-            <th colspan="2">jogador</th>
+            <th>data</th>
             <th>pontos</th>
         </tr>
         </thead>
         <tbody>
-        @forelse($ranking as $posicao => $user)
+        @forelse($quizzes as $quiz)
             <tr>
-                <td>{{$posicao}}</td>
-                <td><img class="rk-avatar" src="{{$user->avatar}}" height="50px"></td>
-                <td>{{$user->name}}</td>
-                <td>{{$user->pontuacao()}}</td>
+                <td>{{$quiz->id}}</td>
+                <td>{{$quiz->created_at->format('d/m/Y H:i:s')}}</td>
+                <td>{{$quiz->goals}}</td>
             </tr>
         @empty
             Nenhum jogador encontrado

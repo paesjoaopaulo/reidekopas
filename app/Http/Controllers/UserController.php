@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Quiz;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -32,13 +33,12 @@ class UserController extends Controller
             $user->name = $request->get('name');
             $user->email = $request->get('email');
             $user->nickname = $request->get('nickname');
-            $user->password = bcrypt($request->get('password'));
 
             if ($request->hasFile('image')) {
                 $file = $request->image;
                 $img_profile = md5($user->nome . time()) . "." . $file->getClientOriginalExtension();
                 $file->storeAs('public', $img_profile);
-                $user->url_image = $img_profile;
+                $user->avatar = $img_profile;
             }
             $user->save();
             Auth::login($user);
@@ -105,7 +105,27 @@ class UserController extends Controller
     public function ranking()
     {
         $users = User::query()->get();
-        return view('ranking', compact('users'));
+        $pre = [];
+
+        foreach ($users as $user) {
+            $pre[$user->id] = $user->pontuacao();
+        }
+
+        arsort($pre);
+
+        $ranking = [];
+        $posicao = 1;
+        foreach ($pre as $id => $pontuacao) {
+            $ranking[$posicao] = User::find($id);
+            $posicao++;
+        }
+
+        return view('ranking', compact('ranking'));
+    }
+
+    public function historico(){
+        $quizzes = Quiz::where("user_id", Auth::user()->id)->get();
+        return view('historico', compact('quizzes'));
     }
 
     public function logout()

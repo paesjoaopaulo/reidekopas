@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
+
+    protected $guarded = [];
     public const WORLD_CUPS = [
         1930,
         1934,
@@ -32,6 +34,22 @@ class Question extends Model
     public function respostaCerta()
     {
         switch ($this->correct_answer) {
+            case 'a':
+                return $this->alt_a;
+            case 'b':
+                return $this->alt_b;
+            case 'c':
+                return $this->alt_c;
+            case 'd':
+                return $this->alt_d;
+            default:
+                return "";
+        }
+    }
+
+    public function respostaByAlt($string = null)
+    {
+        switch ($string) {
             case 'a':
                 return $this->alt_a;
             case 'b':

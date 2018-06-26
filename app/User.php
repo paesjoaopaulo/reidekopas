@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'avatar', 'facebook_id', 'facebook_token', 'nickname'
     ];
 
     /**
@@ -29,7 +29,7 @@ class User extends Authenticatable
 
     public function getActiveQuizAttribute()
     {
-        return $this->quizzes()->whereNull('finish')->get()->last();
+        return Quiz::whereNull('finish')->where('user_id', $this->id)->get()->last();
     }
 
     /**
@@ -45,7 +45,13 @@ class User extends Authenticatable
         );
     }
 
-    public function getPontuacaoTotalAttribute(){
-        return $this->quizzes()->where('user_id', $this->id)->sum('goals');
+    public function pontuacao()
+    {
+        $quizzes = Quiz::where('user_id', $this->id)->get();
+        $soma = 0;
+        foreach ($quizzes as $quiz) {
+            $soma += $quiz->goals;
+        }
+        return $soma;
     }
 }

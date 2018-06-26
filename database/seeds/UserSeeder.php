@@ -15,7 +15,6 @@ class UserSeeder extends Seeder
             ->insert([
                 'name' => 'João Paulo Paes',
                 'email' => 'joaopaulopaez@gmail.com',
-                'password' => bcrypt('joaopaulo@'),
                 'nickname' => 'joaopaulo'
             ]);
     }

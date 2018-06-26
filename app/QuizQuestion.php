@@ -30,4 +30,8 @@ class QuizQuestion extends Model
         return $query->whereNull('answer');
     }
 
+    public function resposta(){
+        return $this->question->respostaByAlt($this->answer);
+    }
+
 }

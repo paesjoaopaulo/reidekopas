@@ -29,4 +29,32 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/logout', 'UserController@logout')->name('logout');
 
+    Route::get('/historico', 'UserController@historico')->name('historico');
+
 });
+
+Route::prefix('/admin')->group(function () {
+
+    Route::get('/login', 'AdminController@login');
+    Route::get('/logout', 'AdminController@logout')->name('admin.logout');
+    Route::post('/login', 'AdminController@doLogin')->name('admin.login');
+
+    Route::group(['middleware' => 'onlyadmin'], function () {
+
+        Route::get('/', 'AdminController@home')->name('admin.home');
+
+        Route::prefix('/questions')->group(function () {
+            Route::get('/', 'AdminController@questions')->name('admin.questoes.index');
+            Route::get('/create', 'AdminController@questionCreate')->name('admin.questoes.create');
+            Route::get('/{question}', 'AdminController@question')->name('admin.questoes.show');
+            Route::get('/{question}/edit', 'AdminController@questionEdit')->name('admin.questoes.edit');
+            Route::put('/{question}', 'AdminController@questionPut')->name('admin.questoes.update');
+            Route::post('/', 'AdminController@questionStore')->name('admin.questoes.store');
+        });
+
+    });
+
+});
+
+Route::get('auth/facebook', 'Auth\SocialiteController@redirectToProvider')->name('facebook.request');
+Route::get('auth/facebook/callback', 'Auth\SocialiteController@handleProviderCallback')->name('facebook.callback');

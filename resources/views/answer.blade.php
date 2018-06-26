@@ -2,7 +2,7 @@
 @section('content')
     <form action="{{route('question', $data['quiz'])}}" class="form" method="post">
         <h1>{{$data['answer']->question->year}}</h1>
-        <fieldset id="responder" disabled="disabled">
+        <fieldset id="responder">
             <legend>{{$data['answer']->question->title}}</legend>
             <div class="form-group">
                 <label class="btn btn-success btn-block btn-large btn-option">
@@ -35,14 +35,14 @@
 @push('scripts')
     <script>
         $(".btn-option").click(function (event) {
-            //$("#responder").children().attr("disabled", "disabled");
+            $("#responder").children().attr("disabled", "disabled");
 
             var correta = $("#correta").val()
             console.log(correta, $(this).val())
 
             $('.btn-option').each(function (i, obj) {
-                if ($(event.target).val() == correta) {
-                    $(event.target).addClass('btn-info')
+                if ($(event.target).val() != correta && $(obj).val() == $(event.target).val()) {
+                    $(event.target).addClass('btn-danger')
                 }
             })
             $('[value="' + correta + '"]').parent('label').addClass('btn-info');

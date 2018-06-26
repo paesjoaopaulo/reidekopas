@@ -6,13 +6,16 @@
     </div>
     @guest
         <div id="register" class="form-group">
-            <a class="btn raised btn-success btn-lg btn-block" href="{{route('register')}}">Registre-se</a>
+            <a class="btn raised btn-success btn-lg btn-block" href="{{route('facebook.request')}}">Registre-se</a>
         </div>
     @endguest
     <div id="ranking" class="form-group">
         <a class="btn raised btn-success btn-lg btn-block" href="{{route('ranking')}}">Ranking</a>
     </div>
     @auth
+        <div id="historico" class="form-group">
+            <a class="btn raised btn-success btn-lg btn-block" href="{{route('historico')}}">Partidas</a>
+        </div>
         <div id="logout" class="form-group">
             <a class="btn raised btn-success btn-lg btn-block" href="{{route('logout')}}">Logout</a>
         </div>
